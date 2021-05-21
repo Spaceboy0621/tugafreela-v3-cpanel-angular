@@ -1,0 +1,11 @@
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+
+    <!-- Login Form -->
+    <form>
+      <input type="text" id="identifier" name="identifier" class="fadeIn second" [(ngModel)]="identifier" placeholder="E-mail">
+      <input type="password" id="password" class="fadeIn third" name="password" [(ngModel)]="password" placeholder="Senha">
+      <input type="submit" class="fadeIn fourth" value="Log In" (click)="login()">
+    </form>
+
+  </div>

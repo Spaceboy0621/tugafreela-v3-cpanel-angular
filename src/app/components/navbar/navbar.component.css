@@ -1,0 +1,19 @@
+nav a {
+    cursor: pointer;
+}
+
+nav a i {
+    color: #132644;
+}
+
+nav a :hover {
+    color: #d35613;
+}
+
+.navbar-toggler-icon {
+    color: #132644 !important;
+}
+
+.active i{
+    color: #d35613 !important;
+}

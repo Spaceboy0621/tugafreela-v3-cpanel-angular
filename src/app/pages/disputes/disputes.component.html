@@ -1,0 +1,55 @@
+<div class="div-title">
+    <h4>Disputas aguardando moderador ({{disputesToShow.length}})</h4>
+    <i [class]="listDisputesToggled ? 'fas fa-arrow-up' : 'fas fa-arrow-down'" (click)="listDisputesToggled = !listDisputesToggled"></i>
+</div>
+
+<div class="disputes-list row shadow" *ngIf="ready && listDisputesToggled">
+    <div [id]="item.id"  class="dispute col-md-3" [class]="'dispute' + item.id" *ngFor="let item of disputesToShow" (click)="selectDispute($event, $this)" >
+        <h5 [id]="item.id">{{item.job.title}}</h5>
+        <p [id]="item.id"> <b [id]="item.id">Freelancer:</b> {{item.job.freelancer.name}}</p>
+        <p [id]="item.id"><b [id]="item.id">Cliente:</b> {{item.job.owner.name}}</p>
+        
+    </div>
+</div>
+
+<hr>
+
+<ul ngbNav #nav="ngbNav" class="nav-tabs nav-dispute">
+  <li ngbNavItem>
+    <a ngbNavLink>Informações da Disputa</a>
+    <ng-template ngbNavContent>
+        <p 
+            style="text-align: center; margin-top: 3%;" 
+            *ngIf="disputeSelected === 0"
+        >
+            <i>Selecione uma disputa para ver suas informações</i>
+        </p>
+        <app-dispute *ngIf="disputeSelected !== 0" [dispute]="dispute" [job]="dispute.job"></app-dispute>
+    </ng-template>
+  </li>
+  <li ngbNavItem>
+    <a ngbNavLink>Mensagem com o Cliente</a>
+    <ng-template ngbNavContent>
+        <p 
+            style="text-align: center; margin-top: 3%;" 
+            *ngIf="disputeSelected === 0"
+        >
+            <i>Selecione uma disputa para ver suas informações</i>
+        </p>
+        <app-message-client *ngIf="disputeSelected !== 0" [idDispute]="dispute.id"></app-message-client>
+    </ng-template>
+  </li>
+  <li ngbNavItem>
+      <a ngbNavLink>Mensagem com o Freelancer</a>
+      <ng-template ngbNavContent>
+        <p 
+        style="text-align: center; margin-top: 3%;" 
+        *ngIf="disputeSelected === 0"
+        >
+            <i>Selecione uma disputa para ver suas informações</i>
+        </p>
+        <app-message-freela *ngIf="disputeSelected !== 0" [idDispute]="dispute.id"></app-message-freela>
+      </ng-template>
+    </li>
+</ul>
+<div [ngbNavOutlet]="nav" ></div>

@@ -1,0 +1,23 @@
+<div class="bg-light" id="sidebar-wrapper">
+    <div class="sidebar-heading"> </div>
+    <div class="list-group">
+  
+      <div class="profile">
+        <div class="avatar">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSya5dwz7sppH6NGJVip5KpNHbO6feSmMVJoQ&usqp=CAU"
+            alt="" class="avatar">
+        </div>
+        <p><i><b>Tipo: </b></i>{{user.type}}</p>
+        <p><i><b>Nome: </b></i>{{user.name}}</p>
+      </div>
+      <a [routerLink]="['/pages/home']" routerLinkActive="active"
+        class="list-group-item list-group-item-action bg-light">
+        <i class="fas fa-tag"></i> Início
+      </a>
+      <a [routerLink]="['/pages/disputes']" routerLinkActive="active"
+        class="list-group-item list-group-item-action bg-light">
+        <i class="far fa-handshake"></i>Disputas
+      </a>
+
+    </div>
+  </div>

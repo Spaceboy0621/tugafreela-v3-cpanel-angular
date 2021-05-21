@@ -1,0 +1,156 @@
+<app-loader *ngIf="!ready"></app-loader>
+<section id="dispute" *ngIf="ready">
+    <div class="container">
+        <div class="row"> 
+            <div class="col-md-4 proposal">
+                <h2>Acordo definidio pelo moderador</h2>
+                <div class="proposal" *ngIf="dispute.percentage_freela !== 0 || dispute.percentage_owner !== 0">
+                    <p><b>Valor total acordado:</b> {{job.agreed_value | currency: 'BRL':'symbol'}}</p>
+                    <p><b>Cliente:</b> {{job.agreed_value * (dispute.percentage_owner/100) | currency: 'BRL':'symbol'}} ({{dispute.percentage_owner}}%) </p>
+                    <p><b>Freela:</b>  {{job.agreed_value * (dispute.percentage_freela/100) | currency: 'BRL':'symbol'}} ({{dispute.percentage_freela}}%) </p>
+                    <p><b>Proposto feito:</b>  <i>{{dispute.deal_proposed_by.name}}</i></p>
+                    <hr>
+                    <p><b>Justificativa do moderador: </b></p>
+                    <p><i>{{dispute.justification}}</i></p>
+                </div>
+                <span *ngIf="dispute.percentage_freela === 0 && dispute.percentage_owner === 0">
+                    Nenhuma proposta de acordo ativa
+                </span>
+            </div>
+
+            <div class="col-md-8">
+                <div class="job">
+                    <h2>{{ job.title }}</h2>
+                    <span>Descrição do job:</span>
+                    <p>
+                        <br>
+                        {{ job.description }}
+                    </p>
+                    <div class="skills">
+                        <h3>Habilidades desejadas:</h3>
+                        <span *ngFor="let skill of job.skills">{{ skill.name }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+        </div>
+
+        <div class="row">
+            <div class="messages">
+                <h2>Mensagens</h2>
+                <div class="message" *ngFor="let item of dispute.messages">
+                    <div class="col-md-2">
+                        <img src="assets/img/profile.png" alt="" class="img-fluid">
+                    </div>
+
+                    <div class="col-md-10">
+                        <div class="row">
+                            <h5>{{item.user.name}} &nbsp;</h5>
+                            <svg *ngFor="let i of item.user.averageRating" xmlns="http://www.w3.org/2000/svg" width="15.135" height="15.105" viewBox="0 0 20.135 20.105">
+                                <path id="star" d="M19.6,7.2l-6.19-.946L10.636.349A.655.655,0,0,0,9.5.349L6.724,6.259.534,7.2A.629.629,0,0,0,.18,8.266l4.5,4.609L3.613,19.391a.63.63,0,0,0,.925.652l5.529-3.056L15.6,20.044a.63.63,0,0,0,.925-.652l-1.063-6.516,4.5-4.609A.63.63,0,0,0,19.6,7.2Z" transform="translate(0 -0.018)" fill="#d6b8ff"/>
+                            </svg>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-9 no-padding-left">
+                                <p>{{item.message}}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <p class="date">{{item.created_at | date}}</p> 
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button 
+        class="btn btn-default make-proposal" 
+        (click)="defineProposalModal.show()"
+    >DEFINIR ACORDO</button>
+
+    <div bsModal class="modal fade" tabindex="-1" #defineProposalModal="bs-modal" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title">Definir Acordo</h1>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="defineProposalModal.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-8 offset-md-2">
+                        <label for="percentage_client">Selecione sua decisão</label>
+                        <select
+                            name="decision"
+                            id="decision"
+                            class="form-control"
+                            [(ngModel)]="decision"
+                            (change)="autoFillFields()"
+                        >
+                            <option value="" selected disabled>Selecione</option>
+                            <option value="fechado_a_favor_do_cliente">Fechar a favor do cliente</option>
+                            <option value="fechado_a_favor_do_freelancer">Fechar a favor do frelancer</option>
+                            <option value="fechado_em_divisao">Fechar em divisão</option>
+                        </select>  
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="percentage_client">% para o cliente</label>
+                        <input
+                            type="number"
+                            name="percentage_client"
+                            id="percentage_client"
+                            class="form-control"
+                            [(ngModel)]="percentage_client"
+                            placeholder="Apenas números"
+                            (focusout)="fillPerentageFreela()"
+                            max="100"
+                            min="0"
+                            [readonly]="decision === '' "
+                        >  
+                        <span><b>Valor: </b> {{value_client | currency: 'BRL':'symbol'}}</span>  
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="percentage_Freela">% para o Freelancer</label>
+                        <input
+                            type="number"
+                            name="percentage_freela"
+                            id="percentage_freela"
+                            class="form-control"
+                            [(ngModel)]="percentage_freela"
+                            placeholder="Apenas números"
+                            readonly
+                        >
+                        <span><b>Valor: </b> {{value_freela | currency: 'BRL':'symbol'}}</span>    
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="justification">Justificativa</label>
+                        <textarea
+                            id="justification"
+                            name="justification"
+                            [(ngModel)]="justification"
+                            class="form-control"
+                            maxlength="100"
+                            rows="3"
+                        ></textarea>
+                        <span>{{justification.length}}/100</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: flex-end;">
+                    <button style="background: #E1B9FF;" class="btn btn-default" (click)="calculateValueProposal()">Calcular</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button style="background: #E1B9FF;color: white;" class="btn btn-default" (click)="sendProposal()">ENVIAR</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</section>

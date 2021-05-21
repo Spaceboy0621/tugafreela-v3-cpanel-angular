@@ -1,0 +1,57 @@
+<app-loader *ngIf="!ready"></app-loader>
+<div class="row" *ngIf="ready">
+    <div class="messages">
+        <div class="message" *ngFor="let item of dispute.messages_moderator">
+            <div class="col-md-2">
+                <img src="assets/img/profile.png" alt="" class="img-fluid">
+            </div>
+
+            <div class="col-md-10">
+                <div class="row">
+                    <h5>{{item.user.name}} &nbsp;</h5>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-9 no-padding-left">
+                        <p>{{item.message}}</p>
+
+                        <div *ngIf="item.attachments && item.attachments.length > 0">
+                            <p *ngFor="let attach of item.attachments">
+                                <a *ngIf="attach.formats && attach.formats !== null" href={{getUrlPhoto(attach.formats.small.url)}} target="_blank">
+                                    <img class="image-chat" src={{getUrlPhoto(attach.formats.small.url)}}  >
+                                </a>
+                                <a *ngIf="!attach.formats || attach.formats === null" href={{getUrlPhoto(attach.url)}} target="_blank">
+                                    {{attach.name}}
+                                </a>
+                            </p>
+                            
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <p class="date">{{item.created_at | date}}</p> 
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+<hr>
+<form *ngIf="ready" class="send-message" (onsubmit)="sendMessage()">
+    <div class="row">
+        <div class="col-md-8">
+            <input 
+                class="form-control"
+                type="text"
+                id="message"
+                name="message"
+                [(ngModel)]="message"
+                placeholder="Digite sua mensagem"
+            >
+        </div>
+        <div class="col-md-4">
+            <button style="background: #E1B9FF;" class="btn btn-default" (click)="sendMessage()">ENVIAR</button>
+        </div>
+    </div>
+</form>

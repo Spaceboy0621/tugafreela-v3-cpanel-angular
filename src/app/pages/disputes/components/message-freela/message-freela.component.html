@@ -1,0 +1,44 @@
+<app-loader *ngIf="!ready"></app-loader>
+<div class="row" *ngIf="ready">
+    <div class="messages">
+        <div class="message" *ngFor="let item of dispute.messages_moderator">
+            <div class="col-md-2">
+                <img src="assets/img/profile.png" alt="" class="img-fluid">
+            </div>
+
+            <div class="col-md-10">
+                <div class="row">
+                    <h5>{{item.user.name}} &nbsp;</h5>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-9 no-padding-left">
+                        <p>{{item.message}}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="date">{{item.created_at | date}}</p> 
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+</div>
+<hr>
+<div *ngIf="ready" class="send-message">
+    <div class="row">
+        <div class="col-md-8">
+            <input 
+                class="form-control"
+                type="text"
+                id="message"
+                name="message"
+                [(ngModel)]="message"
+                placeholder="Digite sua mensagem"
+            >
+        </div>
+        <div class="col-md-4">
+            <button style="background: #E1B9FF;" class="btn btn-default" (click)="sendMessage()">ENVIAR</button>
+        </div>
+    </div>
+</div>
